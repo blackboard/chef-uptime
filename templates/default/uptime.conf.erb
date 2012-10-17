@@ -1,0 +1,23 @@
+<VirtualHost *:80>
+  ServerName <%= @params[:server_name] %>
+  DocumentRoot <%= @params[:docroot] %>
+  ErrorLog /opt/uptime/log/error.log
+  CustomLog /opt/uptime/log/access.log common
+
+  <Proxy balancer://uptimeservers>
+    BalancerMember http://127.0.0.1:8082
+  </Proxy>
+
+  # Redirect all non-static requests to node
+  RewriteCond %{DOCUMENT_ROOT}/%{REQUEST_FILENAME} !-f
+  RewriteRule ^/(.*)$ balancer://uptimeservers%{REQUEST_URI} [P,QSA,L]
+
+  ProxyPass / balancer://uptimeservers/
+  ProxyPassReverse / balancer://uptimeservers/
+  ProxyPreserveHost on
+
+  <Proxy *>
+    Order deny,allow
+    Allow from all
+  </Proxy>
+</VirtualHost>

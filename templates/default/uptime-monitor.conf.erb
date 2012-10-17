@@ -1,0 +1,17 @@
+description "Uptime Monitor"
+author "Chef"
+
+start on (filesystem and net-device-up)
+stop on runlevel [!2345]
+
+respawn
+respawn limit 5 30
+
+chdir <%= @dir %>
+setuid <%= @user %>
+
+script
+  exec node monitor.js 2>&1 >> <%= @log_dir %>/uptime-monitor.log
+end script
+
+emits uptime-monitor-running

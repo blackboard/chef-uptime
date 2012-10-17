@@ -1,0 +1,23 @@
+mongodb:
+  server: <%= @mongodb_host %>
+  database: <%= @mongodb_database %>
+  user: <%= @mongodb_user %>
+  password: <%= @mongodb_password %>
+
+monitor:
+  name: <%= @monitor_name %>
+  apiUrl: '<%= @api_endpoint %>'
+
+  pollingInterval: <%= @monitor_polling_interval %>
+  timeout: <%= @monitor_timeout %>
+  userAgent: NodeUptime/1.3
+
+analyzer:
+  updateInterval: <%= @analyzer_update_interval %>
+  qosAggregationInterval: <% @analyzer_aggregation_interval %>
+  pingHistory: <%= @analyzer_ping_history %>
+
+autoStartMonitor: false
+
+server:
+  port: <%= @port %>
