@@ -56,6 +56,10 @@ apache_module "proxy"
 apache_module "proxy_http"
 apache_module "proxy_balancer"
 
+apache_site "000-default" do
+  enable false
+end
+
 web_app "uptime" do
   template "uptime.conf.erb"
   docroot "#{node["uptime_app"]["dir"]}/app/dashboard/public"
