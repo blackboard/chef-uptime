@@ -2,7 +2,7 @@ maintainer        "Hector Castro"
 maintainer_email  "hectcastro@gmail.com"
 license           "Apache 2.0"
 description       "Installs and configures Uptime."
-version           "0.1.1"
+version           "0.1.2"
 recipe            "uptime", "Installs and configures Uptime"
 
 %w{ apache2 git logrotate mongodb nodejs }.each do |d|
