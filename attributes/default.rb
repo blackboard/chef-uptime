@@ -15,6 +15,6 @@ default["uptime_app"]["mongodb"]["user"]                  = "root"
 default["uptime_app"]["mongodb"]["password"]              = ""
 
 default["uptime_app"]["monitor"]["name"]                  = "origin"
-default["uptime_app"]["monitor"]["api_endpoint"]          = "http://127.0.0.1:#{node["uptime_app"]["port"]}/api"
+default["uptime_app"]["monitor"]["api_endpoint"]          = "http://localhost:#{node["uptime_app"]["port"]}/api"
 default["uptime_app"]["monitor"]["polling_interval"]      = 10000
 default["uptime_app"]["monitor"]["timeout"]               = 5000
