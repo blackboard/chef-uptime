@@ -11,7 +11,7 @@ chdir <%= @dir %>
 setuid <%= @user %>
 
 script
-  exec node monitor.js 2>&1 >> <%= @log_dir %>/uptime-monitor.log
+  exec node monitor.js >> <%= @log_dir %>/uptime-monitor.log 2>&1
 end script
 
 emits uptime-monitor-running
