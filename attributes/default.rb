@@ -5,6 +5,8 @@ default["uptime_app"]["repository"]                       = "git://github.com/fz
 default["uptime_app"]["port"]                             = 8082
 default["uptime_app"]["server_name"]                      = "uptime.example.com"
 
+default["uptime_app"]["status"]["port"]                   = 8083
+
 default["uptime_app"]["analyzer"]["update_interval"]      = 60000
 default["uptime_app"]["analyzer"]["aggregation_interval"] = 600000
 default["uptime_app"]["analyzer"]["ping_history"]         = 8035200000

@@ -17,6 +17,7 @@ git node["uptime_app"]["dir"] do
   repository node["uptime_app"]["repository"]
   action :sync
   notifies :restart, "service[uptime-app]"
+  notifies :restart, "service[uptime-status]"
   notifies :restart, "service[uptime-monitor]"
 end
 
@@ -43,6 +44,27 @@ template "#{node["uptime_app"]["dir"]}/config/production.yml" do
     :analyzer_ping_history          => node["uptime_app"]["analyzer"]["ping_history"]
   )
   notifies :restart, "service[uptime-app]"
+  notifies :restart, "service[uptime-monitor]"
+end
+
+template "#{node["uptime_app"]["dir"]}/config/status.yml" do
+  mode "0644"
+  source "production.yml.erb"
+  variables(
+    :port                           => node["uptime_app"]["status"]["port"],
+    :mongodb_host                   => node["uptime_app"]["mongodb"]["host"],
+    :mongodb_database               => node["uptime_app"]["mongodb"]["database"],
+    :mongodb_user                   => node["uptime_app"]["mongodb"]["user"],
+    :mongodb_password               => node["uptime_app"]["mongodb"]["password"],
+    :monitor_name                   => node["uptime_app"]["monitor"]["name"],
+    :api_endpoint                   => node["uptime_app"]["monitor"]["api_endpoint"],
+    :monitor_polling_interval       => node["uptime_app"]["monitor"]["polling_interval"],
+    :monitor_timeout                => node["uptime_app"]["monitor"]["timeout"],
+    :analyzer_update_interval       => node["uptime_app"]["analyzer"]["update_interval"],
+    :analyzer_aggregation_interval  => node["uptime_app"]["analyzer"]["aggregation_interval"],
+    :analyzer_ping_history          => node["uptime_app"]["analyzer"]["ping_history"]
+  )
+  notifies :restart, "service[uptime-status]"
   notifies :restart, "service[uptime-monitor]"
 end
 
@@ -80,7 +102,7 @@ logrotate_app "uptime" do
   create "644 root root"
 end
 
-[ "uptime-app", "uptime-monitor" ].each do |component|
+[ "uptime-app", "uptime-monitor", "uptime-status" ].each do |component|
   template "/etc/init/#{component}.conf" do
     mode "0644"
     source "#{component}.conf.erb"
