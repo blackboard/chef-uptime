@@ -1,11 +1,24 @@
+include_recipe "build-essential"
 include_recipe "git"
 include_recipe "nodejs"
 include_recipe "apache2"
 include_recipe "apache2::mod_proxy"
 include_recipe "apache2::mod_proxy_http"
 include_recipe "apache2::mod_proxy_balancer"
+include_recipe "apache2::mod_lbmethod_byrequests"
+
+gem_package "bson_ext"
+node.set['mongodb']['config']['auth'] = true
+node.set["mongodb"]["users"] = [{
+        "username" => node["uptime_app"]["mongodb"]["user"],
+        "password" => node["uptime_app"]["mongodb"]["password"],
+        "roles" => ['dbAdmin'],
+        "database" => node["uptime_app"]["mongodb"]["database"]
+}]
+
 include_recipe "mongodb::10gen_repo"
 include_recipe "mongodb"
+include_recipe "mongodb::user_management"
 include_recipe "logrotate"
 
 user node["uptime_app"]["user"] do
@@ -26,7 +39,13 @@ execute "npm-install" do
   command "npm install"
 end
 
-template "#{node["uptime_app"]["dir"]}/config/production.yml" do
+node.set["apache"]["mpm"]  = "event"
+apache_module "proxy"
+apache_module "proxy_http"
+apache_module "proxy_balancer"
+apache_module "lbmethod_byrequests"
+
+template "#{node["uptime_app"]["dir"]}/config/default.yaml" do
   mode "0644"
   source "production.yml.erb"
   variables(
@@ -74,9 +93,7 @@ file "#{node["uptime_app"]["dir"]}/config/runtime.json" do
   action :create
 end
 
-apache_module "proxy"
-apache_module "proxy_http"
-apache_module "proxy_balancer"
+
 
 apache_site "000-default" do
   enable false
