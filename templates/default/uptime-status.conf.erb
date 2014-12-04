@@ -11,7 +11,8 @@ chdir <%= @dir %>
 setuid <%= @user %>
 
 script
-  exec NODE_ENV=status node app.js >> <%= @log_dir %>/uptime-status.log 2>&1
+  export NODE_ENV=status
+  exec node status.js >> <%= @log_dir %>/uptime-status.log 2>&1
 end script
 
 emits uptime-status-running

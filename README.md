@@ -50,3 +50,11 @@ Installs and configures [Uptime](http://fzaninotto.github.com/uptime/).
 ## Usage
 
 Currently only supports a single MongoDB instance running on the same node.
+
+## Vagrant
+
+	> vagrant plugin install vagrant-berkshelf
+	> vagrant plugin install vagrant-omnibus
+	> vagrant up
+
+Requires Vagrant 1.5+
