@@ -21,3 +21,10 @@ autoStartMonitor: false
 
 server:
   port: <%= @port %>
+
+plugins:
+  - ./plugins/console
+  - ./plugins/patternMatcher
+  - ./plugins/httpOptions
+
+url: 'http://localhost:8082'

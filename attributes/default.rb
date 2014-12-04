@@ -1,7 +1,7 @@
 default["uptime_app"]["dir"]                              = "/opt/uptime"
 default["uptime_app"]["user"]                             = "uptime"
 default["uptime_app"]["log_dir"]                          = "#{node["uptime_app"]["dir"]}/log"
-default["uptime_app"]["repository"]                       = "git://github.com/fzaninotto/uptime.git"
+default["uptime_app"]["repository"]                       = "https://github.com/blackboard/uptime.git"
 default["uptime_app"]["port"]                             = 8082
 default["uptime_app"]["server_name"]                      = "uptime.example.com"
 
