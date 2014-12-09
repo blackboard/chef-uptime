@@ -18,19 +18,6 @@ node.set["mongodb"]["users"] = [{
 
 include_recipe "mongodb::mongodb_org_repo"
 include_recipe "mongodb"
-
-begin
-  tries ||= 10
-  http_port = node["uptime_app"]["mongodb"]["port"]
-  response = Net::HTTP.get_response(node["uptime_app"]["mongodb"]["host"], "/", http_port)
-rescue
-  Chef::Log.debug("HTTP listner is not available yet")
-  sleep(5)
-  retry unless (tries -= 1).zero?
-end
-#response.must_be_kind_of(Net::HTTPOK)
-
-include_recipe "mongodb::user_management"
 include_recipe "logrotate"
 
 user node["uptime_app"]["user"] do
@@ -130,6 +117,8 @@ logrotate_app "uptime" do
   rotate 7
   create "644 root root"
 end
+
+include_recipe "mongodb::user_management"
 
 [ "uptime-app", "uptime-monitor", "uptime-status" ].each do |component|
   template "/etc/init/#{component}.conf" do
