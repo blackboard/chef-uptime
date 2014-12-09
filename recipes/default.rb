@@ -16,8 +16,20 @@ node.set["mongodb"]["users"] = [{
         "database" => node["uptime_app"]["mongodb"]["database"]
 }]
 
-include_recipe "mongodb::10gen_repo"
+include_recipe "mongodb::mongodb_org_repo"
 include_recipe "mongodb"
+
+begin
+  tries ||= 10
+  http_port = node["uptime_app"]["mongodb"]["port"]
+  response = Net::HTTP.get_response(node["uptime_app"]["mongodb"]["host"], "/", http_port)
+rescue
+  Chef::Log.debug("HTTP listner is not available yet")
+  sleep(5)
+  retry unless (tries -= 1).zero?
+end
+#response.must_be_kind_of(Net::HTTPOK)
+
 include_recipe "mongodb::user_management"
 include_recipe "logrotate"
 
