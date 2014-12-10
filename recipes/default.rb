@@ -33,11 +33,6 @@ git node["uptime_app"]["dir"] do
   notifies :restart, "service[uptime-monitor]"
 end
 
-execute "npm-install" do
-  cwd node["uptime_app"]["dir"]
-  command "npm install"
-end
-
 node.set["apache"]["mpm"]  = "event"
 apache_module "proxy"
 apache_module "proxy_http"
@@ -116,6 +111,11 @@ logrotate_app "uptime" do
   frequency "daily"
   rotate 7
   create "644 root root"
+end
+
+execute "npm-install" do
+  cwd node["uptime_app"]["dir"]
+  command "npm install"
 end
 
 include_recipe "mongodb::user_management"
