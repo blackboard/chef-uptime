@@ -7,6 +7,8 @@ include_recipe "apache2::mod_proxy_http"
 include_recipe "apache2::mod_proxy_balancer"
 include_recipe "apache2::mod_lbmethod_byrequests"
 
+ENV['HOME'] = "/root"
+
 gem_package "bson_ext"
 node.set['mongodb']['config']['auth'] = true
 node.set["mongodb"]["users"] = [{
