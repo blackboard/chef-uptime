@@ -120,6 +120,13 @@ logrotate_app "uptime" do
   create "644 root root"
 end
 
+execute 'wait-for-mongo' do
+  command 'mongo'
+  action :run
+  retries 15
+  retry_delay 10
+end
+
 include_recipe "mongodb::user_management"
 
 [ "uptime-app", "uptime-monitor", "uptime-status" ].each do |component|
